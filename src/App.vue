@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <div class="bg-red-300">
-      Hello
-    </div>
+    <GridLayout />
   </div>
 </template>
 
 <script>
 
+import GridLayout from "./components/GridLayout";
 export default {
   name: 'App',
   components: {
+    GridLayout
   }
 }
 </script>
