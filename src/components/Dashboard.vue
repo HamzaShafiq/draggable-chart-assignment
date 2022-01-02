@@ -43,13 +43,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.remove {
-  position: absolute;
-  right: 2px;
-  top: 0;
-  cursor: pointer;
-}
-
-</style>

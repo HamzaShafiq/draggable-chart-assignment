@@ -1,22 +1,22 @@
 <template>
-  <Loader v-if="loading" />
   <div
-    v-else
-    class="relative bg-white pt-1 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-96"
+    class="w-screen relative bg-white pt-1 sm:pt-6 sm:px-6 rounded-lg pb-10"
   >
-    <apexchart
+    <VueApexCharts
       type="donut"
       :height="600"
       :options="chartOptions"
-      :series="stats"
+      :series="series"
     />
-    <Description class="mt-10" v-if="description" :description="description" />
   </div>
 </template>
 <script>
-import Loader from "@/components/shared/SkeletonLoaders/Chart.vue";
-import Description from "@/components/Analytics/charts/description.vue";
+import VueApexCharts from 'vue-apexcharts';
+
 export default {
+  components: {
+    VueApexCharts,
+  },
   computed: {
     chartOptions() {
       return {
@@ -24,10 +24,10 @@ export default {
           type: "donut",
         },
         legend: {
-          offsetY: -220,
+          offsetY: -250,
           position: "bottom",
         },
-        labels: ["Pending Requests", "Approved Requests", "Ordered"],
+        labels: this.labels,
         plotOptions: {
           pie: {
             startAngle: -90,
@@ -48,11 +48,9 @@ export default {
       };
     },
   },
-  components: { Loader, Description },
   props: {
-    loading: { type: Boolean, default: false },
-    stats: { type: Array, required: true },
-    description: { type: String, required: false },
+    series: { type: Array, required: true },
+    labels: { type: Array, required: false },
   },
 };
 </script>

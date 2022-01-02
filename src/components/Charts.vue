@@ -33,6 +33,11 @@ import SparkChart from "./charts/SparkChart";
 import ChartLoader from "./shared/ChartLoader";
 import {formattedAmount, groupBy, isObjectEmpty} from "../utils/utility_methods";
 import IndicatorChart from "./charts/IndicatorChart";
+import DonutChart from "./charts/DonutChart";
+import PieChart from "./charts/PieChart";
+import {barChartData, columnChartData} from "../utils/requestData";
+import BarChart from "./charts/BarChart";
+import ColumnChart from "./charts/ColumnChart";
 
 export default {
   components: {
@@ -40,7 +45,11 @@ export default {
     GridItem,
     SparkChart,
     ChartLoader,
-    IndicatorChart
+    IndicatorChart,
+    DonutChart,
+    PieChart,
+    BarChart,
+    ColumnChart
   },
   props: {
     analytics: {
@@ -106,6 +115,58 @@ export default {
             averageTime: [],
             heading: "",
           }
+        },
+        {
+          x: 0,
+          y: 0,
+          w: 6,
+          h: 7,
+          i: "3",
+          type: "DonutChart",
+          id: "order_status",
+          chart: {
+            labels: [],
+            series: [],
+          }
+        },
+        {
+          x: 6,
+          y: 0,
+          w: 6,
+          h: 7,
+          i: "4",
+          type: "PieChart",
+          id: "order_statuses",
+          chart: {
+            labels: [],
+            series: [],
+          }
+        },
+        {
+          x: 0,
+          y: 0,
+          w: 6,
+          h: 7,
+          i: "5",
+          type: "BarChart",
+          id: "order_year",
+          chart: {
+            categories: [],
+            series: [],
+          }
+        },
+        {
+          x: 6,
+          y: 0,
+          w: 6,
+          h: 7,
+          i: "6",
+          type: "ColumnChart",
+          id: "product_stats",
+          chart: {
+            categories: [],
+            series: [],
+          }
         }
       ],
       draggable: true,
@@ -122,7 +183,17 @@ export default {
       if (!this.analytics.requests) return 0;
       let total = this.analytics.requests.map((item) => parseFloat(item.amount)).reduce((prev, next) => prev + next);
       return total;
-    }
+    },
+    orderStatusesData() {
+      const { orders, requests } = this.analytics;
+      const approved = requests.filter(request => request.status === "A").length - orders;
+      const pending = requests.filter(request => request.status === "P").length;
+
+      return {
+        labels: ["Pending Requests", "Approved Requests", "Ordered"],
+        series: [pending, approved, orders],
+      }
+    },
   },
   methods: {
     addItem() {
@@ -143,7 +214,7 @@ export default {
     },
     chartConfig(item){
       let config = {};
-      const {heading, subHeading, series, categories, averageTime} = item.chart;
+      const {heading, subHeading, series, categories, averageTime, labels} = item.chart;
 
       switch (item.type) {
         case 'SparkChart':
@@ -151,6 +222,18 @@ export default {
           break;
         case 'IndicatorChart':
           config = {heading, averageTime};
+          break;
+        case 'DonutChart':
+          config = {labels, series};
+          break;
+        case 'PieChart':
+          config = {labels, series};
+          break;
+        case 'BarChart':
+          config = {categories, series};
+          break;
+        case 'ColumnChart':
+          config = {categories, series};
           break;
       }
       return config;
@@ -160,19 +243,35 @@ export default {
       const {avgDays, avgHours, avgPastDays, avgPastHours} = order;
 
       this.layout.forEach(layout => {
-        if(layout.id === "requests_amount"){
-          layout.chart.series = [{ name: 'Count',  data: Object.values(groupBy(requests, "createdAt")).map(value => value.length)}];
+        if (layout.id === "requests_amount") {
+          layout.chart.series = [{
+            name: 'Count',
+            data: Object.values(groupBy(requests, "createdAt")).map(value => value.length)
+          }];
           layout.chart.categories = Object.keys(groupBy(requests, "createdAt"));
           layout.chart.heading = formattedAmount(this.requestsAmountTotal);
           layout.chart.subHeading = "Amount";
-        } else if (layout.id === "requests_amount1"){
-          layout.chart.series = [{ name: 'Count',  data: Object.values(groupBy(requests, "createdAt")).map(value => value.length)}];
+        } else if (layout.id === "requests_amount1") {
+          layout.chart.series = [{
+            name: 'Count',
+            data: Object.values(groupBy(requests, "createdAt")).map(value => value.length)
+          }];
           layout.chart.categories = Object.keys(groupBy(requests, "createdAt"));
           layout.chart.heading = formattedAmount(this.requestsAmountTotal / 1000);
           layout.chart.subHeading = "Amount";
-        } else if (layout.id === "order_stats"){
+        } else if (layout.id === "order_stats") {
           layout.chart.averageTime = {avgDays, avgHours, avgPastDays, avgPastHours}
           layout.chart.heading = 'Order conversion';
+        } else if (["order_status", "order_statuses"].includes(layout.id)) {
+          const donutPieChartData = this.orderStatusesData;
+          layout.chart.labels = donutPieChartData.labels;
+          layout.chart.series = donutPieChartData.series;
+        } else if (layout.id === "order_year") {
+          layout.chart.categories = barChartData.categories;
+          layout.chart.series = barChartData.series;
+        } else if (layout.id === "product_stats") {
+          layout.chart.categories = columnChartData.categories;
+          layout.chart.series = columnChartData.series;
         }
       });
     }
