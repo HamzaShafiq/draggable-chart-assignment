@@ -1,16 +1,19 @@
 <template>
-  <div id="app">
-    <GridLayout />
+  <div>
+    <div id="app" class="flex-1 relative z-0 overflow-y-auto p-3 sm:p-6 h-screen">
+      <h2 class="font-bold text-lg">Monitoring and Performance Stats</h2>
+      <Dashboard />
+    </div>
   </div>
 </template>
 
 <script>
 
-import GridLayout from "./components/GridLayout";
+import Dashboard from "./components/Dashboard";
 export default {
   name: 'App',
   components: {
-    GridLayout
+    Dashboard
   }
 }
 </script>
