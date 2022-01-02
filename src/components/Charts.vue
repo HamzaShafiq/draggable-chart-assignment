@@ -1,36 +1,40 @@
 <template>
-  <GridLayout
-    :layout.sync="layout"
-    :col-num="colNum"
-    :row-height="50"
-    :is-draggable="draggable"
-    :is-resizable="resizable"
-    :responsive="true"
-    :vertical-compact="true"
-    :use-css-transforms="true"
-  >
-    <GridItem
-      v-for="(item, index) in layout"
-      :key="index"
-      :static="item.static"
-      :x="item.x"
-      :y="item.y"
-      :w="item.w"
-      :h="item.h"
-      :i="item.i"
-      class="border border-gray-300 relative bg-white pt-1 pb-2 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden box box3 flex"
+  <div>
+    <Loader :show="isLoading" :fullPage="true" />
+    <GridLayout
+      :layout.sync="layout"
+      :col-num="colNum"
+      :row-height="50"
+      :is-draggable="draggable"
+      :is-resizable="resizable"
+      :responsive="true"
+      :vertical-compact="true"
+      :use-css-transforms="true"
+      v-if="!isLoading"
     >
-<!--      <span class="remove" @click="removeItem(item.i)">x</span>-->
-      <ChartLoader v-if="isLoading" class="bg-white" />
-      <component :is="item.type" v-bind="chartConfig(item)" v-else />
-    </GridItem>
-  </GridLayout>
+      <GridItem
+        v-for="(item, index) in layout"
+        :key="index"
+        :static="item.static"
+        :x="item.x"
+        :y="item.y"
+        :w="item.w"
+        :h="item.h"
+        :i="item.i"
+        class="border border-gray-300 relative bg-white pt-1 pb-2 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden box box3 flex"
+      >
+        <!--      <span class="remove" @click="removeItem(item.i)">x</span>-->
+        <component :is="item.type" v-bind="chartConfig(item)" />
+      </GridItem>
+    </GridLayout>
+  </div>
+
 </template>
 
 <script>
 import {GridItem, GridLayout} from "vue-grid-layout";
 import SparkChart from "./charts/SparkChart";
-import ChartLoader from "./shared/ChartLoader";
+import Loader from "./shared/Loader";
 import {formattedAmount, groupBy, isObjectEmpty} from "../utils/utility_methods";
 import IndicatorChart from "./charts/IndicatorChart";
 import DonutChart from "./charts/DonutChart";
@@ -44,7 +48,7 @@ export default {
     GridLayout,
     GridItem,
     SparkChart,
-    ChartLoader,
+    Loader,
     IndicatorChart,
     DonutChart,
     PieChart,

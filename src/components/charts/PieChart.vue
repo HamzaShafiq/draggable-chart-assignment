@@ -21,7 +21,7 @@ export default {
     chartOptions() {
       return {
         chart: {
-          width: 400,
+          width: 500,
           type: 'pie',
         },
         labels: this.labels,
