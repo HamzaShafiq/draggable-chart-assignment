@@ -5,41 +5,16 @@
 <!--    <button @click="addItem">Add an item dynamically</button>
     <input type="checkbox" v-model="draggable" /> Draggable
     <input type="checkbox" v-model="resizable" /> Resizable-->
-    <Charts :analytics="analytics" :isLoading="!isDataFetched" />
+    <Charts />
   </div>
 </template>
 
 <script>
 import Charts from "./Charts";
-import requestData from "../utils/requestData";
-import {isObjectEmpty} from "../utils/utility_methods";
 
 export default {
   components: {
     Charts,
-  },
-  data(){
-    return {
-      loading: false,
-      analytics: {}
-    }
-  },
-  computed: {
-    isDataFetched(){
-      return !this.loading && !isObjectEmpty(this.analytics);
-    }
-  },
-  mounted(){
-    this.loading = true;
-    setTimeout(() => {
-      this.fetchAnalytics();
-    }, 1000);
-  },
-  methods: {
-    fetchAnalytics(){
-      this.analytics = requestData;
-      this.loading = false;
-    }
   }
 }
 </script>
