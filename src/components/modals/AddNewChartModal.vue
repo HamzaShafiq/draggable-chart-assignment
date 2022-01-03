@@ -9,22 +9,22 @@
     </template>
     <template #body>
       <div class="mt-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 my-2 capitalize">
+            Chart
+          </label>
           <div>
-            <label class="block text-sm font-medium text-gray-700 my-2 capitalize">
-              Chart
-            </label>
-            <div>
-              <select
-                name="chartName"
-                v-model="chartName"
-                class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-              >
-                <option value="">Please select chart</option>
-                <option v-for="(option, index) in chartOptions" :key="index" :value="option">{{ option }}</option>
-              </select>
-            </div>
+            <select
+              name="chartName"
+              v-model="chartName"
+              class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+            >
+              <option value="">Please select chart</option>
+              <option v-for="(option, index) in chartOptions" :key="index" :value="option">{{ option }}</option>
+            </select>
           </div>
         </div>
+      </div>
     </template>
     <template #footer>
       <button
