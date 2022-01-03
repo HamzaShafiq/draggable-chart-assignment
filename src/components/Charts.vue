@@ -28,7 +28,7 @@
       >
         <component :is="item.type" v-bind="chartConfig(item)" />
         <button class="w-3 h-2 ml-auto mr-2" @click="removeItem(item.i)">
-          <span class="w-3 h-2 ml-auto bg-red-500 text-white font-bold py-0.5 px-2.5 rounded-full ml-auto" @click="removeItem(item.i)">x</span>
+          <span class="w-3 h-2 ml-auto bg-red-500 text-white font-bold py-0.5 px-2.5 rounded-full ml-auto">x</span>
         </button>
       </GridItem>
     </GridLayout>
